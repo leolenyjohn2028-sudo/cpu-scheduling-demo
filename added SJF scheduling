@@ -1,0 +1,43 @@
+# Shortest Job First (SJF) Non-Preemptive Scheduling
+
+def sjf_scheduling(processes):
+    n = len(processes)
+    processes.sort(key=lambda x: x[1])  # sort by burst time
+    
+    waiting_time = [0] * n
+    turnaround_time = [0] * n
+    
+    # Calculate waiting times
+    for i in range(1, n):
+        waiting_time[i] = waiting_time[i-1] + processes[i-1][1]
+    
+    # Calculate turnaround times
+    for i in range(n):
+        turnaround_time[i] = waiting_time[i] + processes[i][1]
+    
+    # Print results
+    print("Process\tBurst Time\tWaiting Time\tTurnaround Time")
+    for i in range(n):
+        print(f"P{processes[i][0]}\t{processes[i][1]}\t\t{waiting_time[i]}\t\t{turnaround_time[i]}")
+    
+    avg_wait = sum(waiting_time) / n
+    avg_turnaround = sum(turnaround_time) / n
+    print(f"\nAverage Waiting Time: {avg_wait:.2f}")
+    print(f"Average Turnaround Time: {avg_turnaround:.2f}")
+    
+    # Gantt Chart
+    print("\nGantt Chart:")
+    time = 0
+    for i in range(n):
+        print(f"| P{processes[i][0]} ", end="")
+        time += processes[i][1]
+    print("|")
+    time = 0
+    for i in range(n):
+        print(f"{time}\t", end="")
+        time += processes[i][1]
+    print(time)
+
+# Example usage: (ProcessID, BurstTime)
+processes = [(1, 6), (2, 8), (3, 7), (4, 3)]
+sjf_scheduling(processes)
